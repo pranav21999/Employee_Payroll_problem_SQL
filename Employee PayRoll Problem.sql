@@ -5,16 +5,12 @@
 create database payroll_service;
 show databases;
 use payroll_service;
-#--------------------------------------------------------------------------------------------------------------------------------------------------#
-#uc2
-#created:table for employee_payroll
-#2)
-create table employee_payroll(
-	id int unsigned not null auto_increment,
-    name varchar(30) not null,
-    salary double not null,
-    start date not null,
-    primary key(id)
+CREATE TABLE employee_payroll (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(30) NOT NULL,
+    salary DOUBLE NOT NULL,
+    start DATE NOT NULL,
+    PRIMARY KEY (id)
 );
 #--------------------------------------------------------------------------------------------------------------------------------------------------#
 #uc3
@@ -23,29 +19,95 @@ insert  into employee_payroll(name,salary, start) values
  ('pranav',600000.0,'2021-02-06'),
   ('sanket',400000.0,'2021-04-06'),
   ('abc',400000.0,'2021-04-06');
-#--------------------------------------------------------------------------------------------------------------------------------------------------#
-#uc4
-#displayed:All Table information 
-select * from employee_payroll;
-#--------------------------------------------------------------------------------------------------------------------------------------------------#
- #uc5
- #Added:Ability to retrieve salary data for a particular employee as well as all employees who have joined in a particular data range from the payroll service database
- select * from employee_payroll where name='pranav';
-  select * from employee_payroll where start between cast('2021-02-06' AS date) and Date(now());
+SELECT 
+    *
+FROM
+    employee_payroll;
+SELECT 
+    *
+FROM
+    employee_payroll
+WHERE
+    name = 'pranav';
+SELECT 
+    *
+FROM
+    employee_payroll
+WHERE
+    start BETWEEN CAST('2021-02-06' AS DATE) AND DATE(NOW());
 #--------------------------------------------------------------------------------------------------------------------------------------------------#
 #uc6 
 #Added:Ability to add Gender to Employee Payroll Table and Update the Rows to reflect the correct Employee Gender
 alter table employee_payroll add gender char(1) after name;
-update  employee_payroll set gender='M' where name ='pranav';
+UPDATE employee_payroll 
+SET 
+    gender = 'M'
+WHERE
+    name = 'pranav';
+SELECT 
+    salary
+FROM
+    employee_payroll;
+SELECT 
+    SUM(salary)
+FROM
+    employee_payroll;
+SELECT 
+    MIN(salary)
+FROM
+    employee_payroll;
+SELECT 
+    MAX(salary)
+FROM
+    employee_payroll;
+SELECT 
+    COUNT(salary)
+FROM
+    employee_payroll;
+SELECT 
+    AVG(salary)
+FROM
+    employee_payroll;
+SELECT 
+    SUM(salary)
+FROM
+    employee_payroll
+WHERE
+    gender = 'F'
+GROUP BY gender;
 #--------------------------------------------------------------------------------------------------------------------------------------------------#
-#Uc7
-#Ability to find sum, average, min, max and number of male and female employees
-select salary from employee_payroll;
-select sum(salary) from employee_payroll;  
-select min(salary) from employee_payroll;  
-select max(salary) from employee_payroll;  
-select count(salary) from employee_payroll;  
-select avg(salary) from employee_payroll;  
-select sum(salary) from employee_payroll where
-	gender='F' group by gender;
-#--------------------------------------------------------------------------------------------------------------------------------------------------#
+
+#uc8 
+#Ability to extend employee_payroll data to store employee informationlike employee phone, address and department - Ensure employee department
+#query
+alter table employee_payroll add phone varchar(15) ,add address varchar(20) default 'address1',add department varchar(20) not null;
+UPDATE employee_payroll 
+SET 
+    department = 'sales'
+WHERE
+    name IN ('pranav' , 'sanket');
+SELECT 
+    *
+FROM
+    employee_payroll;
+#--------------------------------------------------------------------------------------------------------------------------------------------------
+#uc9
+#Ability to extendemployee_payroll tableto have Basic Pay,Deductions, Taxable Pay,Income Tax, Net Pay
+alter table employee_payroll 
+add basic_pay int, 
+add deductions int,
+add taxable_pay int  ,
+add tax int,
+add net_pay int;
+DELETE FROM employee_payroll 
+WHERE
+    id IN (1 , 2, 3, 4, 5, 6);
+
+insert into employee_payroll (name,department,gender,basic_pay,deductions,taxable_pay,tax,net_pay,start,salary) values
+	('Terissa','Marketing','F',3000000,1000000,2000000,500000,1500000,'2021-07-08',90000);
+    
+insert into employee_payroll (name,department,gender,basic_pay
+,deductions,taxable_pay,tax,net_pay,start,salary) values
+	('Terissa','Sales','F',3000000,
+    0,0,0,0,'2021-06-01',89999);
+#____________________________________________________________________________________________________________________________________________________
